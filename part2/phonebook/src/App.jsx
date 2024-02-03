@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
+import personService from './services/persons'
 
-const Nums = ( {persons} ) => {
+const Nums = ( {persons, del} ) => {
   return (
     <div>
-      {persons.map(persons => <p key={persons.name}>
-        {persons.name} {persons.number}
+      {persons.map(person => <p key={person.name}>
+        {person.name} {person.number} <button onClick={() => del(person.id)}>delete</button>
       </p>)}
     </div>
   )
@@ -37,13 +38,11 @@ const App = () => {
   const [filteredPersons, setFilteredPersons] = useState(persons)
 
   useEffect(() => {
-    console.log('effect')
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        console.log('promise fulfilled')
-        setPersons(response.data)
-        setFilteredPersons(response.data)
+    personService
+      .getAll()
+      .then(initalPersons => {
+        setPersons(initalPersons)
+        setFilteredPersons(initalPersons)
       })
   }, [])
 
@@ -57,14 +56,42 @@ const App = () => {
     const included = persons.some(person => person.name === personObject.name)
       
     if (included) {
-      alert(`${newName} is already added to phonebook`)
-    } else {
-      setPersons(persons.concat(personObject))
-      setFilteredPersons(filteredPersons.concat(personObject))
-    }
+      if (window.confirm(`${personObject.name} is already added to phonebook, replace the old number with a new one?`)) {
+        const updateNum = persons.filter(person => person.name === personObject.name)
 
-    setNewName('')
-    setNewNumber('')
+        personService
+          .update(updateNum[0].id, personObject)
+          .then(returnedPerson => {
+            console.log(returnedPerson)
+            setPersons(persons.map(person => person.id !== updateNum[0].id ? person : returnedPerson))
+            setFilteredPersons(persons.map(person => person.id !== updateNum[0].id ? person : returnedPerson))
+          })
+      }
+
+    } else {
+      personService
+        .create(personObject)
+        .then(returnedPerson => {
+          setPersons(persons.concat(returnedPerson))
+          setFilteredPersons(filteredPersons.concat(returnedPerson))
+          setNewName('')
+          setNewNumber('')
+        })
+
+      }
+  }
+
+  const del = (id) =>{
+    const delPerson = persons.find(person => person.id === id)
+    
+    if (window.confirm(`Delete ${delPerson.name} ?`)) {
+      const updatedPerson = persons.filter(person => person.id !== id)
+
+      personService
+        .delName(id)
+      setPersons(updatedPerson)
+      setFilteredPersons(updatedPerson)
+    }
   }
 
   const handleNameChange = (event) => {
@@ -80,11 +107,7 @@ const App = () => {
 
     const filteredItems = persons.filter((person => person.name.toLowerCase().includes(searchTerm.toLowerCase())))
     setFilteredPersons(filteredItems)
-
   }
-
-  console.log(persons)
-  console.log(filteredPersons)
 
   return (
     <div>
@@ -95,7 +118,7 @@ const App = () => {
       <PersonForm addName={addName} newName={newName} handleNameChange={handleNameChange} newNumber={newNumber} handleNumberChange={handleNumberChange}/>
 
       <h2>Numbers</h2>
-      <Nums persons={filteredPersons}/>
+      <Nums persons={filteredPersons} del={del}/>
     </div>
   )
 }
@@ -103,10 +126,9 @@ const App = () => {
 export default App
 
 /*
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '040-123456', id: 1 },
-    { name: 'Ada Lovelace', number: '39-44-5323523', id: 2 },
-    { name: 'Dan Abramov', number: '12-43-234345', id: 3 },
-    { name: 'Mary Poppendieck', number: '39-23-6423122', id: 4 }
-  ])
+          .then(returnedPerson => {
+            setPersons(persons.map(person => person.id !== updateNum[0].id ? person : returnedPerson))
+            setFilteredPersons(persons)
+          })
+
 */
