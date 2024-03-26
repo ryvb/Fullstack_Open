@@ -137,6 +137,12 @@ const App = () => {
           }, 10000)
         })
         .catch(error => {
+          setMessage(`${error.response.data.error}`)
+          setErr(true)
+          setTimeout(() => {
+            setMessage(null)
+            setErr(false)
+          }, 10000)
           console.log(error.response.data.error)
         })
       }

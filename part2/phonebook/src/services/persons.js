@@ -25,4 +25,3 @@ const delName = (id) => {
 
 export default { getAll, create, update, delName }
 
-/* 'http://localhost:3001/api/persons' */
