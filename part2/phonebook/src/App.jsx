@@ -136,6 +136,9 @@ const App = () => {
             setMessage(null)
           }, 10000)
         })
+        .catch(error => {
+          console.log(error.response.data.error)
+        })
       }
 
 
@@ -188,13 +191,5 @@ const App = () => {
 export default App
 
 /*
-          .catch(error => {
-            setMessage(`Information of ${delPerson.name} has already been removed from server`)
-            setErr(true)
-            setTimeout(() => {
-              setMessage(null)
-              setErr(false)
-            }, 50000)
-          })
 
 */
