@@ -143,7 +143,6 @@ const App = () => {
             setMessage(null)
             setErr(false)
           }, 10000)
-          console.log(error.response.data.error)
         })
       }
 
