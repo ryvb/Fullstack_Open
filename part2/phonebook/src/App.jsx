@@ -1,7 +1,9 @@
+/* eslint-disable react/prop-types */
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+//import axios from 'axios'
 import personService from './services/persons'
 
+// eslint-disable-next-line react/prop-types
 const Nums = ( {persons, del} ) => {
   return (
     <div>
@@ -18,6 +20,7 @@ const Filtering = ( {f, handleInputChange} ) => {
   )
 }
 
+// eslint-disable-next-line react/prop-types
 const PersonForm = ( {addName, newName, handleNameChange, newNumber, handleNumberChange} ) => {
   return (
     <form onSubmit={addName}>
@@ -113,6 +116,7 @@ const App = () => {
               setMessage(null)
             }, 10000)
           })
+          // eslint-disable-next-line no-unused-vars
           .catch(error => {
             setMessage(`Information of ${personObject.name} has already been removed from server`)
             setErr(true)
