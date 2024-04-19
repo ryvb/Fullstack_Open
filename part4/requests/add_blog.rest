@@ -5,5 +5,5 @@ Content-Type: application/json
     "title": "Nog een Blog",
     "author": "Jan de Jong",
     "url": "www.jandejong.com",
-    "likes": 5
+    "likes": 0
 }
