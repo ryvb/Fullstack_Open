@@ -89,5 +89,4 @@ module.exports = {
 }
 
 /*
-nBlogs.every(item => item.author === blog.author)
 */
