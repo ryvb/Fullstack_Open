@@ -1,0 +1,24 @@
+{
+  "name": "e2etest",
+  "version": "1.0.0",
+  "description": "end_to_end_testing",
+  "main": "index.js",
+  "scripts": {
+    "test": "playwright test",
+    "test:report": "playwright show-report"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/ryvb/Fullstack_Open.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ryvb/Fullstack_Open/issues"
+  },
+  "homepage": "https://github.com/ryvb/Fullstack_Open#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.43.1",
+    "@types/node": "^20.12.8"
+  }
+}

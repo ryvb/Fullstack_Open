@@ -1,0 +1,11 @@
+Put http://localhost:3003/api/blogs/662a49625f1efa3296b00c92 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkhhbGxvRGFhciIsImlkIjoiNjYyOGU0ZGI4NDBjNTZiZjkzZTgxZjhjIiwiaWF0IjoxNzE0MzEzMTc0LCJleHAiOjE3MTQzMTY3NzR9.8TvM007NJSHtAQ4va1rDBaBwhTqr28eRU506-JVPHWc
+
+{
+    "title": "EenTitel",
+    "author": "Arthas Menethil",
+    "url": "www.am.com",
+    "likes": 1,
+    "user": "6628e4db840c56bf93e81f8c"
+}
