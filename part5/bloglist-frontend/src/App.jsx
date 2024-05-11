@@ -21,21 +21,6 @@ const App = () => {
     })
   }, [])
 
-
-  /*useEffect(() => {
-    blogService.getAll()
-      .then(blogs => {
-        if (user !== null) {
-          const filtered = blogs.filter(blog => blog.user.username === user.username)
-          const sorted = filtered.sort((a,b) => b.likes - a.likes)
-          setBlogs(sorted)
-        } else {
-          setBlogs(blogs)
-        }
-      }
-      )
-  })*/
-
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
     if (loggedUserJSON) {
@@ -106,9 +91,9 @@ const App = () => {
       )
       blogService.setToken(user.token)
       setUser(user)
-      const filtered = blogs.filter(blog => blog.user.username === user.username)
-      const sorted = filtered.sort((a,b) => b.likes - a.likes)
-      setBlogs(sorted)
+      //const filtered = blogs.filter(blog => blog.user.username === user.username)
+      //const sorted = filtered.sort((a,b) => b.likes - a.likes)
+      setBlogs(blogs.sort((a,b) => b.likes - a.likes))
 
     } catch (exception) {
       setMessage('Wrong username or password')
@@ -142,6 +127,14 @@ const App = () => {
     }
   }
 
+  const showBlogs = ( blogs ) => {
+    return (
+      <div>
+        {blogs.map(blog => blog.user.username === user.username ? <Blog key={blog.id} blog={blog} updateLike={updateLikes} deleteBlog={deleteBlog} delButton={true}/> : <Blog key={blog.id} blog={blog} updateLike={updateLikes} deleteBlog={deleteBlog} delButton={false}/> )}
+      </div>
+    )
+  }
+
 
   return (
     <div>
@@ -151,8 +144,7 @@ const App = () => {
 
       <Notification message={message}/>
       {blogForm()}
-      {blogs.map(blog => <Blog key={blog.id} blog={blog} updateLike={updateLikes} deleteBlog={deleteBlog}/>)}
-
+      {showBlogs(blogs)}
     </div>
   )
 }
