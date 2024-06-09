@@ -1,0 +1,11 @@
+# Ignore artifacts:
+build
+coverage
+.env
+.eslintrc.cjs
+package-lock.json
+package.json
+README.md
+public
+node_modules
+coverage
