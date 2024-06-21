@@ -1,21 +1,28 @@
 import { useState } from 'react'
+import { createBlog } from '../reducers/blogReducer'
+import { setNotification } from '../reducers/notificationReducer'
+import { useDispatch } from 'react-redux'
 
-const BlogForm = ({ createBlog }) => {
+const BlogForm = () => {
+  const dispatch = useDispatch()
   const [blogTitle, setBlogTitle] = useState('')
   const [blogAuthor, setBlogAuthor] = useState('')
   const [blogUrl, setBlogUrl] = useState('')
 
   const addBlog = (event) => {
     event.preventDefault()
-    createBlog({
+    dispatch(createBlog({
       title: blogTitle,
       author: blogAuthor,
       url: blogUrl
-    })
+    }))
+
+    dispatch(setNotification(`${blogTitle} added`))
 
     setBlogTitle('')
     setBlogAuthor('')
     setBlogUrl('')
+
   }
 
 

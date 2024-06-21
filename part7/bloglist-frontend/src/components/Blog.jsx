@@ -1,6 +1,9 @@
 import { useState } from 'react'
+import { likeBlog, delBlog, reload } from '../reducers/blogReducer'
+import { setNotification } from '../reducers/notificationReducer'
+import { useDispatch } from 'react-redux'
 
-const Blog = ({ blog, updateLike, deleteBlog, delButton }) => {
+const Blog = ({ blog, delButton }) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -9,17 +12,16 @@ const Blog = ({ blog, updateLike, deleteBlog, delButton }) => {
     marginBottom: 5
   }
 
-  const addLike = (event) => {
-    //event.preventDefault()
-    updateLike({
-      title: blog.title,
-      author: blog.author,
-      url: blog.url,
-      likes: blog.likes + 1,
-      id: blog.id
-    })
+  const dispatch = useDispatch()
+
+  const addLike = () => {
+    dispatch(likeBlog(blog))
   }
 
+  const deleteBlog = () => {
+    dispatch(delBlog(blog))
+    dispatch(setNotification(`${blog.title} deleted`))
+  }
 
   const [visibleDetails, setVisibleDetails] = useState(false)
   const hideWhenVisible = { display: visibleDetails ? 'none' : '' }
@@ -41,7 +43,7 @@ const Blog = ({ blog, updateLike, deleteBlog, delButton }) => {
           <li>{blog.user.name}</li>
         </ul>
         <div>
-          {delButton && <button onClick={() => deleteBlog(blog)}>remove</button>}
+          {delButton && <button onClick={() => deleteBlog()}>remove</button>}
         </div>
       </div>
     </div>
@@ -49,3 +51,6 @@ const Blog = ({ blog, updateLike, deleteBlog, delButton }) => {
 }
 
 export default Blog
+
+/*
+*/
