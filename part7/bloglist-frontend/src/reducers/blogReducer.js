@@ -45,14 +45,18 @@ export const createBlog = (content) => {
 export const likeBlog = (likedAnecdote) => {
     return async dispatch => {
       const newLikes = likedAnecdote.likes + 1
+      console.log(likedAnecdote)
       const changedBlog = {
         title: likedAnecdote.title,
         author: likedAnecdote.author,
         url: likedAnecdote.url,
         likes: newLikes,
         id: likedAnecdote.id,
+        user: likedAnecdote.user
       }
+      console.log(changedBlog)
       const updatedBlog = await blogService.update(changedBlog)
+      console.log(updatedBlog)
       dispatch(updateBlogs(updatedBlog))
     }
 }

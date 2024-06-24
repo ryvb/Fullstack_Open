@@ -1,18 +1,13 @@
-import { useState } from 'react'
-import { likeBlog, delBlog, reload } from '../reducers/blogReducer'
+import { likeBlog, delBlog } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { useLocation } from 'react-router-dom'
 
-const Blog = ({ blog, delButton }) => {
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5
-  }
-
+const Blog = () => {
+  const location = useLocation()
   const dispatch = useDispatch()
+  const user = useSelector(state => state.user)
+  const blogs = useSelector(state => state.blogs)
 
   const addLike = () => {
     dispatch(likeBlog(blog))
@@ -23,29 +18,34 @@ const Blog = ({ blog, delButton }) => {
     dispatch(setNotification(`${blog.title} deleted`))
   }
 
-  const [visibleDetails, setVisibleDetails] = useState(false)
-  const hideWhenVisible = { display: visibleDetails ? 'none' : '' }
-  const showWhenVisible = { display: visibleDetails ? '' : 'none' }
+  const blog = blogs.filter(blog => blog.id === location.state)[0]
+
+  const checkDelButton = () => {
+    if (user === null) {
+      return false
+    }
+    else {
+      if (blog.user.name === user.name) {
+        return true
+      } else {
+        return false
+      }
+    }
+  }
+  
+  if (user === null) {
+    return null
+  }
+
+  const delButton = checkDelButton()
 
   return (
-
-    <div style={blogStyle}>
-      <div className='summarizedBlogInfo' style={hideWhenVisible} data-testid='summarizedBlogInfo'>
-        {blog.title} {blog.author}
-        <button onClick={() => setVisibleDetails(true)}>view</button>
-      </div>
-      <div className='detailedBlogInfo' style={showWhenVisible}>
-        <button onClick={() => setVisibleDetails(false)}>hide</button>
-        <ul>
-          <li>{blog.title}</li>
-          <li>{blog.url}</li>
-          <li data-testid='likes'>{blog.likes} <button onClick={() => addLike()} id='like-button'>like</button></li>
-          <li>{blog.user.name}</li>
-        </ul>
-        <div>
-          {delButton && <button onClick={() => deleteBlog()}>remove</button>}
-        </div>
-      </div>
+    <div>
+      <h3>{blog.title}</h3>
+      <div>{blog.url}</div>
+      <div>{blog.likes} likes <button onClick={() => addLike()} id='like-button'>like</button></div>
+      <div>added by {blog.user.name}</div>
+      <div>{delButton && <button onClick={() => deleteBlog()}>remove</button>}</div>
     </div>
   )
 }
@@ -53,4 +53,48 @@ const Blog = ({ blog, delButton }) => {
 export default Blog
 
 /*
+const Blog = () => {
+  const location = useLocation()
+  const dispatch = useDispatch()
+  const user = useSelector(state => state.user)
+  const blog = location.state
+
+  const addLike = () => {
+    dispatch(likeBlog(blog))
+  }
+
+  const deleteBlog = () => {
+    dispatch(delBlog(blog))
+    dispatch(setNotification(`${blog.title} deleted`))
+  }
+
+  const checkDelButton = () => {
+    if (user === null) {
+      return false
+    }
+    else {
+      if (blog.user.name === user.name) {
+        return true
+      } else {
+        return false
+      }
+    }
+  }
+
+  const delButton = checkDelButton()
+
+  return (
+    <div>
+      {console.log(user)}
+      {console.log(blog)}
+      <h3>{blog.title}</h3>
+      <div>{blog.url}</div>
+      <div>{blog.likes} likes <button onClick={() => addLike()} id='like-button'>like</button></div>
+      <div>added by {blog.user.name}</div>
+      <div>{delButton && <button onClick={() => deleteBlog()}>remove</button>}</div>
+    </div>
+  )
+}
+
+export default Blog
 */

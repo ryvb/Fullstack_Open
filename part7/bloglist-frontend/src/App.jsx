@@ -1,76 +1,35 @@
-import { useEffect, useRef } from 'react'
-import { useSelector } from 'react-redux'
+import Home from './components/Home'
+import Users from './components/Users'
+import User from './components/User'
+import Blog from './components/Blog'
 
-import LoginForm from './components/LoginForm'
-import BlogForm from './components/BlogForm'
-import Togglable from './components/Togglable'
-import blogService from './services/blogs'
-
-import { useDispatch } from 'react-redux'
-import { initializeBlogs } from './reducers/blogReducer'
-import { extendLogin, logout } from './reducers/userReducer'
-import Blogs from './components/Blogs'
+import {
+  BrowserRouter as Router,
+  Routes, Route, Link
+} from 'react-router-dom'
 
 const App = () => {
-  const blogFormRef = useRef()
-  const loginFormRef = useRef()
-  const user = useSelector(state => state.user)
 
-  const dispatch = useDispatch()
-
-  useEffect(() => {
-    dispatch(initializeBlogs())
-  }, [dispatch])
-
-  useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      dispatch(extendLogin(user))
-    }
-  }, [dispatch])
-
-  const blogForm = () => {
-    return (
-      <div>
-        <Togglable buttonLabel="new blog" ref={blogFormRef}>
-          <BlogForm />
-        </Togglable>
-      </div>
-    )
-  }
-
-  const loginForm = () => {
-    return (
-      <Togglable buttonLabel="login" ref={loginFormRef}>
-        <LoginForm />
-      </Togglable>
-    )
-  }
-
-  const handleLogout = async (event) => {
-    window.localStorage.removeItem(
-      'loggedBlogappUser'
-    )
-    blogService.setToken(null)
-    dispatch(logout())
-  }
-
-  if (user === null) {
-    return (
-      <div>
-        {loginForm()}
-      </div>
-    )
+  const padding = {
+    padding: 5
   }
 
   return (
-    <div>
-      <h2>blogs</h2>
-      <button onClick={() => handleLogout()}>logout</button>
-      {blogForm()}
-      <Blogs />
-    </div>
+    <Router>
+      <h2>Blog app</h2>
+      <div>
+        <Link style={padding} to="/">home</Link>
+        <Link style={padding}to="/users">users</Link>
+      </div>
+
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/users" element={<Users />}/>
+        <Route path="/users/:id" element={<User />}/>
+        <Route path="/blogs/:id" element={<Blog />}/>
+      </Routes>
+
+    </Router>
   )
 }
 
@@ -78,24 +37,4 @@ export default App
 
 /*
 
-
-
-
-  
-  const handleLogin = async (userObject) => {
-    loginFormRef.current.toggleVisibility()
-    try {
-      const user = await loginService.login(userObject)
-
-      window.localStorage.setItem(
-        'loggedBlogappUser', JSON.stringify(user)
-      )
-      blogService.setToken(user.token)
-      dispatch(login(user))
-      dispatch(setNotification(`${userObject.username} logged in`))
-
-    } catch (exception) {
-      dispatch(setNotification('Wrong username or password'))
-    }
-  }
 */
