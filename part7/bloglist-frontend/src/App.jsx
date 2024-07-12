@@ -2,10 +2,11 @@ import Home from './components/Home'
 import Users from './components/Users'
 import User from './components/User'
 import Blog from './components/Blog'
+import LoginForm from './components/LoginForm'
 
 import {
   BrowserRouter as Router,
-  Routes, Route, Link
+  Routes, Route
 } from 'react-router-dom'
 
 const App = () => {
@@ -15,21 +16,17 @@ const App = () => {
   }
 
   return (
-    <Router>
-      <h2>Blog app</h2>
-      <div>
-        <Link style={padding} to="/">home</Link>
-        <Link style={padding}to="/users">users</Link>
-      </div>
-
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/users" element={<Users />}/>
-        <Route path="/users/:id" element={<User />}/>
-        <Route path="/blogs/:id" element={<Blog />}/>
-      </Routes>
-
-    </Router>
+    <div className="container">
+      <Router>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/users" element={<Users />}/>
+          <Route path="/users/:id" element={<User />}/>
+          <Route path="/blogs/:id" element={<Blog />}/>
+          <Route path="/login" element={<LoginForm />}/>
+        </Routes>
+      </Router>
+    </div>
   )
 }
 

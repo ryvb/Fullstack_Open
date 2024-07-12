@@ -1,9 +1,8 @@
 import { useSelector, useDispatch } from 'react-redux'
-
 import { useEffect } from 'react'
 import { initializeBlogs } from '../reducers/blogReducer'
-
 import { Link } from 'react-router-dom'
+import Table from 'react-bootstrap/Table'
 
 const Blogs = () => {
   const blogStyle = {
@@ -24,15 +23,20 @@ const Blogs = () => {
   
   return (
     <div>
-      {blogs.map(blog =>
-        <div key={blog.id}><Link to={`/blogs/${blog.id}`} state={blog.id}><div style={blogStyle}>{blog.title}</div></Link></div>
-      )}
+      <Table striped>
+        <tbody>
+          {blogs.map(blog =>
+            <tr key={blog.id}>
+              <td>
+                <Link to={`/blogs/${blog.id}`} state={blog.id}>{blog.title}</Link>
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </Table>
     </div>
   )
 }
 
 export default Blogs
 
-/*
-
-*/

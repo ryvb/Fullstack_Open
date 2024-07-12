@@ -6,14 +6,20 @@ import { extendLogin, logout } from '../reducers/userReducer'
 import blogService from '../services/blogs'
 
 import Togglable from './Togglable'
-import LoginForm from './LoginForm'
 import BlogForm from './BlogForm'
 import Blogs from './Blogs'
 
+import { Link } from 'react-router-dom'
+
+import { Navbar, Nav, Button } from 'react-bootstrap'
+
 
 const Home = () => {
+    const padding = {
+      padding: 5
+    }
+
     const blogFormRef = useRef()
-    const loginFormRef = useRef()
     const user = useSelector(state => state.user)
 
     const dispatch = useDispatch()
@@ -36,14 +42,6 @@ const Home = () => {
         )
     }
     
-    const loginForm = () => {
-        return (
-          <Togglable buttonLabel="login" ref={loginFormRef}>
-            <LoginForm />
-          </Togglable>
-        )
-    }
-    
     const handleLogout = async (event) => {
         window.localStorage.removeItem(
           'loggedBlogappUser'
@@ -52,21 +50,43 @@ const Home = () => {
         dispatch(logout())
     }
 
-    if (user === null) {
-        return (
-          <div>
-            {loginForm()}
-          </div>
-        )
-    }
+
     
     return (
-        <div>
-          <button onClick={() => handleLogout()}>logout</button>
-          {blogForm()}
-          <Blogs />
-        </div>
+      <div>
+        <Navbar collapseOnSelect expand="lg" bg="light">
+          <Navbar.Toggle aria-controls="responsive-navbar-nav"/>
+          <Navbar.Collapse id="responsive-navbar-nav">
+            <Nav className="me-auto">
+              <Nav.Link href="#" as="span">
+                <Link style={padding} to="/">home</Link>
+              </Nav.Link>
+              <Nav.Link href="#" as="span">
+                <Link style={padding}to="/users">users</Link>
+              </Nav.Link>
+              {user
+                ? <em>{user.name} logged in</em>
+                : <Nav.Link href="#" as="span">
+                  <Link style={padding}to="/login">login</Link>
+                </Nav.Link>}
+              {user
+                ? <Button onClick={() => handleLogout()}>logout</Button>
+                : null}
+            </Nav>
+          </Navbar.Collapse>
+        </Navbar>
+        
+        <h2>Blog App</h2>
+        {user
+          ? blogForm()
+          : null}
+        <Blogs />
+      </div>
     )
 }
 
 export default Home
+
+/*
+
+*/

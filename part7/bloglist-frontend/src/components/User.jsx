@@ -4,6 +4,8 @@ import { useLocation } from 'react-router-dom'
 import { useEffect } from 'react'
 import { initializeBlogs } from '../reducers/blogReducer'
 
+import { ListGroup } from 'react-bootstrap'
+
 const User = () => {
     const blogs = useSelector(state => state.blogs)
     const location = useLocation()
@@ -24,12 +26,13 @@ const User = () => {
             <h2>{filteredBlogs[0].user.name}</h2>
             <h3>added blogs</h3>
             {filteredBlogs.map(blog =>
-                <ul key={blog.id}>
-                    <li>{blog.title}</li>
-                </ul>
+                <ListGroup key={blog.id}>
+                    <ListGroup.Item>{blog.title}</ListGroup.Item>
+                </ListGroup>
             )}
         </div>
     )
 }
 
 export default User
+

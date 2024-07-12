@@ -1,4 +1,5 @@
 import { useSelector } from 'react-redux'
+import { Alert } from 'react-bootstrap'
 
 const Notification = () => {
   const notification = useSelector(state => state.notification)
@@ -9,10 +10,18 @@ const Notification = () => {
   }
 
   return (
-    <div style={style}>
-      {notification}
+    <div>
+      {(notification &&
+        <Alert>
+          {notification}
+        </Alert>
+      )}
     </div>
   )
 }
 
 export default Notification
+
+/*
+
+*/

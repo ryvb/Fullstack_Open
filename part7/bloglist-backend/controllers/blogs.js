@@ -1,10 +1,10 @@
 const jwt = require('jsonwebtoken')
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
-const User = require('../models/user')
+const Comment = require('../models/comment')
 
 blogsRouter.get('/', async (request, response) => {
-  const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 })
+  const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 }).populate('comments')
   response.json(blogs)
 })
   
@@ -48,10 +48,10 @@ blogsRouter.put('/:id', async (request, response) => {
     author: body.author,
     url: body.url,
     likes: body.likes,
-    user: user.id
+    user: user.id,
   }
 
-  const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, { new: true }).populate('user', { username: body.user.username, name: body.user.name })
+  const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, { new: true }).populate('user', { username: body.user.username, name: body.user.name }).populate('comments', { comment: 1, blog: request.params.id })
   response.json(updatedBlog)
 })
 
@@ -63,6 +63,32 @@ blogsRouter.get('/:id', async (request, response) => {
   } else {
     response.status(404).end()
   }
+})
+
+blogsRouter.post('/:id/comments', async (request, response) => {
+  const body = request.body
+  const blog = await Blog.findById(request.params.id)
+
+  const comment = new Comment({
+    comment: body.comment,
+    blog: blog
+  })
+
+  const savedComment = await comment.save()
+  blog.comments = blog.comments.concat(savedComment._id)
+  await blog.save()
+  const returnedBlog = await (await blog.populate('user', { username: 1, name: 1})).populate('comments', { comment: 1, blog: request.params.id})
+  response.status(201).json(returnedBlog)
+})
+
+blogsRouter.get('/:id/comments', async (request, response) => {
+  const blog = await Blog.findById(request.params.id)
+  if (blog) {
+    response.json(blog.comments)
+  } else {
+    response.status(404).end()
+  }
+
 })
 
 module.exports = blogsRouter

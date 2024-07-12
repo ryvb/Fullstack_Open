@@ -39,4 +39,10 @@ const del = async objectId => {
   return response.data
 }
 
-export default { getAll, create, setToken, update, del }
+const comment = async newObject => {
+  const response = await axios.post(`${baseUrl}/${newObject.blog}/comments`, newObject)
+  console.log(response)
+  return response.data
+}
+
+export default { getAll, create, setToken, update, del, comment }
