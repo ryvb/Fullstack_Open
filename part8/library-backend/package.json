@@ -1,0 +1,24 @@
+{
+  "name": "library-backend",
+  "version": "1.0.0",
+  "description": "GraphQl",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ryvb/Fullstack_Open.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ryvb/Fullstack_Open/issues"
+  },
+  "homepage": "https://github.com/ryvb/Fullstack_Open#readme",
+  "dependencies": {
+    "@apollo/server": "^4.10.4",
+    "graphql": "^16.9.0",
+    "nodemon": "^3.1.4"
+  }
+}
