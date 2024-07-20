@@ -1,6 +1,6 @@
 POST http://localhost:3003/api/blogs HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkhhbGxvRGFhciIsImlkIjoiNjYyOGU0ZGI4NDBjNTZiZjkzZTgxZjhjIiwiaWF0IjoxNzE5NjY3OTEwLCJleHAiOjE3MTk2NzE1MTB9.jDUduiZil0NJqplpSDuUETF7RYQPIp8ObifuZFyE7Q4
+Authorization: Bearer x
 
 {
     "title": "Speak Fool",

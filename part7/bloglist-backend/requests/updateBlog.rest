@@ -1,6 +1,6 @@
 Put http://localhost:3003/api/blogs/662a49625f1efa3296b00c92 HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkhhbGxvRGFhciIsImlkIjoiNjYyOGU0ZGI4NDBjNTZiZjkzZTgxZjhjIiwiaWF0IjoxNzE0MzEzMTc0LCJleHAiOjE3MTQzMTY3NzR9.8TvM007NJSHtAQ4va1rDBaBwhTqr28eRU506-JVPHWc
+Authorization: Bearer x
 
 {
     "title": "EenTitel",
