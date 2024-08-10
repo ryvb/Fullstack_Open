@@ -3,7 +3,8 @@ import { useQuery, useMutation } from '@apollo/client'
 import { ALL_AUTHORS, CHANGE_AUTHOR } from '../queries'
 
 const Authors = (props) => {
-  const authors = useQuery(ALL_AUTHORS, {pollInterval: 10000})
+  //const authors = useQuery(ALL_AUTHORS, {pollInterval: 10000})
+  const authors = useQuery(ALL_AUTHORS)
   const [name, setName] = useState('')
   const [born, setBorn ] = useState('')
   const [ changeAuthor ] = useMutation(CHANGE_AUTHOR)
@@ -31,7 +32,6 @@ const Authors = (props) => {
   return (
     <div>
       <h2>authors</h2>
-      {console.log(authors.data.allAuthors)}
       <table>
         <tbody>
           <tr>

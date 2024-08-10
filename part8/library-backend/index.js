@@ -54,6 +54,8 @@ const typeDefs = `
     bookCount: Int!
     allAuthors: [Author!]!
     allBooks(author: String, genres: [String]): [Book!]!
+    allGenres: [String!]!
+    reccBooks: [Book!]!
     me: User
   }
   
@@ -91,22 +93,40 @@ const resolvers = {
       return Author.find({})
     },
     allBooks: async (root, args) => {
-        if (!args.author && !args.genre) {
-            return Book.find({})
-        } else if (args.author && !args.genre) {
-            return Book.find({ author: args.author })
-        } else if (!args.author && args.genre) {
-            return Book.find({ genres: { $in: args.genre } })
+        if (!args.author && !args.genres) {
+            return Book.find({}).populate('author')
+        } else if (args.author && !args.genres) {
+            return Book.find({ author: args.author }).populate('author')
+        } else if (!args.author && args.genres) {
+            return Book.find({ genres: { $in: args.genres } }).populate('author')
         } else {
-            return Book.find({ author: args.author}, {genres: { $in: args.genre } })
+            return Book.find({ author: args.author}, {genres: { $in: args.genres } }).populate('author')
         }   
+    },
+    allGenres: async (root, args) => {
+      const books = await Book.find({})
+      const genres = [...new Set(books.map((book) => book.genres).flat(1))]
+      return genres
+    },
+    reccBooks: async (root, args, context) => {
+      const currentUser = context.currentUser
+
+      if (!currentUser) {
+        throw new GraphQLError('not authenticated', {
+          extensions: {
+            code: 'BAD_USER_INPUT'
+          }
+        })
+      }
+      return Book.find({genres: { $in: currentUser.favoriteGenre}}).populate('author')
+
     },
     me: (root, args, context) => {
       return context.currentUser
     }
   },
   Mutation: {
-    addBook: async (root, args) => {
+    addBook: async (root, args, context) => {
         const currentUser = context.currentUser
 
         if (!currentUser) {
@@ -151,7 +171,7 @@ const resolvers = {
           try {
             await book.save()
           } catch (error) {
-            throw new GraphQLError('Sasving book failed', {
+            throw new GraphQLError('Saving book failed', {
               extensions: {
                 code: 'BAD_USER_INPUT',
                 invalidArgs: args.name,
@@ -162,7 +182,6 @@ const resolvers = {
 
           return book
         }
-
     },
     addAuthor: async (root, args) => {
         const author = new Author({ ...args, id: uuid() })
@@ -179,7 +198,7 @@ const resolvers = {
         }
         return author
     },
-    editAuthor: async (root, args) => {
+    editAuthor: async (root, args, context) => {
         const currentUser = context.currentUser
         if (!currentUser) {
           throw new GraphQLError('not authenticated', {
