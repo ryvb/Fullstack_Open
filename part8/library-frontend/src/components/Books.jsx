@@ -1,10 +1,34 @@
-import { useQuery } from '@apollo/client'
-import { ALL_BOOKS } from '../queries'
-import { ALL_GENRES } from '../queries'
+import { useQuery, useSubscription } from '@apollo/client'
+import { ALL_BOOKS, ALL_GENRES, BOOK_ADDED } from '../queries'
+
+export const updateCache = (cache, query, addedBook) => {
+  const uniqByTitle = (a) => {
+    let seen = new Set()
+
+    return a.filter((item) => {
+      let k = item.title
+      return seen.has(k) ? false : seen.add(k)
+    })
+  }
+
+  cache.updateQuery(query, ({ allBooks }) => {
+    return {
+      allBooks: uniqByTitle(allBooks.concat(addedBook)),
+    }
+  })
+}
 
 const Books = (props) => {
   const { data, refetch } = useQuery(ALL_BOOKS)
   const genres = useQuery(ALL_GENRES)
+
+  useSubscription(BOOK_ADDED, {
+    onData: ({ data, client }) => {
+      const addedBook = data.data.bookAdded
+
+      updateCache(client.cache, { query: ALL_BOOKS }, addedBook)
+    }
+  })
   
   if (!props.show) {
     return null

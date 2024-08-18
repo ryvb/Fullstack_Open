@@ -3,7 +3,13 @@ import { RECC_BOOKS } from '../queries'
 import { FAV_GENRE } from '../queries'
 
 const Recommend = (props) => {
-    const books = useQuery(RECC_BOOKS)
+    const books = useQuery(RECC_BOOKS, {
+        errorPolicy: 'all',
+        onError: (error) => {
+            const messages = error.graphQLErrors.map(e => e.message).join('\n')
+            console.log(messages)
+        }
+    })
     const favGenre = useQuery(FAV_GENRE)
 
     if (!props.show) {
