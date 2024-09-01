@@ -3,6 +3,12 @@ interface bmiInputValues {
     value2: number,
 }
 
+interface bmiOutput {
+    weight: number,
+    height: Number,
+    bmi: String
+}
+
 const parseBmi = (args: String[]): bmiInputValues => {
     if (args.length < 4) throw new Error('Not enough arguments');
     if (args.length > 4) throw new Error('Too many arguments');
@@ -17,24 +23,31 @@ const parseBmi = (args: String[]): bmiInputValues => {
     }
 }
 
-const calculateBmi = (height: number, weight: number): String => {
+const calculateBmi = (height: number, weight: number): bmiOutput => {
     const bmi = (weight / ((height/100)**2));
+    let bmiText = ""
     if (bmi < 16) {
-        return 'Underweight (Severe thinness)'
+        bmiText = 'Underweight (Severe thinness)'
     } else if (bmi >= 16 && bmi < 17) {
-        return 'Underweight (moderate thinness)'
+        bmiText = 'Underweight (moderate thinness)'
     } else if (bmi >= 17 && bmi < 18.5) {
-        return 'Underweight (Mild thinness)'
+        bmiText = 'Underweight (Mild thinness)'
     } else if (bmi >= 18.5 && bmi < 25) {
-        return 'Normal range'
+        bmiText = 'Normal range'
     } else if (bmi >= 25 && bmi < 30) {
-        return 'Overweight (Pre-obese)'
+        bmiText = 'Overweight (Pre-obese)'
     } else if (bmi >= 30 && bmi < 35) {
-        return 'Overweight (Pre-obese)'
+        bmiText = 'Overweight (Pre-obese)'
     } else if (bmi >= 35 && bmi < 40) {
-        return 'Overweight (Pre-obese)'
+        bmiText = 'Overweight (Pre-obese)'
     }  else {
-        return 'Obese (Class III)'
+        bmiText = 'Obese (Class III)'
+    }
+
+    return {
+        weight: weight,
+        height: height,
+        bmi: bmiText
     }
 }
 
@@ -48,3 +61,5 @@ try {
     }
     console.log(errorMessage)
 }
+
+export default calculateBmi
