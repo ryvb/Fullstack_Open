@@ -3,7 +3,7 @@ interface Result {
     trainingDays: number;
     succes: boolean;
     rating: number;
-    ratingDescription: String;
+    ratingDescription: string;
     target: number;
     average: number;
 }
@@ -24,11 +24,11 @@ const parse = (args: string[]): inputValues => {
         return {
             value1: result,
             value2: Number(args[2])
-        }
+        };
     } else {
         throw new Error('Provided values were not numbers!');
     }
-}
+};
 
 const calculateExercises = (exerciseHours: number[], target: number): Result => {
     const periodLength = exerciseHours.length;
@@ -42,7 +42,7 @@ const calculateExercises = (exerciseHours: number[], target: number): Result => 
         rating = 2;
         ratingDescription = 'not too bad but could be better';
     } else if (average > target) {
-        rating = 3
+        rating = 3;
         ratingDescription = 'Very good';
     }
 
@@ -54,18 +54,20 @@ const calculateExercises = (exerciseHours: number[], target: number): Result => 
         ratingDescription: ratingDescription,
         target: target,
         average: average,
-    }
-}
+    };
+};
 
 //console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2))
 
 try {
     const { value1, value2 } = parse(process.argv);
-    console.log(calculateExercises(value1, value2))
+    console.log(calculateExercises(value1, value2));
 } catch(error: unknown) {
-    let errorMessage = 'Something bad happened.'
+    let errorMessage = 'Something bad happened.';
     if (error instanceof Error) {
-        errorMessage += ' Error ' + error.message
+        errorMessage += ' Error ' + error.message;
     }
-    console.log(errorMessage)
+    console.log(errorMessage);
 } 
+
+export default calculateExercises;
